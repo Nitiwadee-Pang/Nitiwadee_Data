@@ -2,11 +2,15 @@ public class ArrayList implements Collection{
     private int capacity;
     private int count;
     private Object[] arry;
-
+    Object [] hashtable;
+    int tablesize = 2;
     public ArrayList(int size){
         arry = new Object[size];
         capacity = size;
         count = 0;
+
+        tablesize = nextPrime(size);
+        hashtable = new Object[tablesize];
     }
 
     @Override
@@ -30,6 +34,7 @@ public class ArrayList implements Collection{
         } else {
             throw new RuntimeException("out of bounds");
         }
+        update_hashtable();
         count++;
     }
 
@@ -115,71 +120,91 @@ public class ArrayList implements Collection{
             }
         System.out.println("]");
     }
-
-    public  Object[] sort(Object[] left,Object[] right){
-        Object[] value = new Object[left.length+ right.length];
-        int l=0,r = 0,index = 0;
-        while (l <left.length && r < right.length){
-            if(Integer.parseInt(left[l].toString()) <= Integer.parseInt(right[r].toString())){
-                value[index++] = left[l++];
+    public void sort_selection() {
+        for (int i = 0; i < arry.length-1; i++) {
+            int min = i;
+            for (int j = i+1; j < arry.length; j++) {
+                if(Integer.parseInt(arry[min].toString()) > Integer.parseInt(arry[j].toString())){
+                    min = j;
+                }
             }
-            else{
-                value[index++] = right[r++];
+            Object temp = arry[i];
+            arry[i] = arry[min];
+            arry[min] = temp;
+        }
+    }
+    public boolean search_sequential(Object value) {
+        sort_selection();
+        for (int i = 0; i < size(); i++) {
+            if(Integer.parseInt(arry[i].toString()) == Integer.parseInt(value.toString())){
+                return  true;
             }
         }
-        while (l <left.length) {
-            value[index++] = left[l++];
-        }
-        while (r < right.length) {
-            value[index++] = right[r++];
-        }
+        return false;
+    }
 
-        return value;
-    }
-    public  Object[] mergesort (Object[] objects) {
-        if(objects.length <=1){
-            return objects;
-        }
-        Object[] left = new Object[objects.length/2];
-        Object[] right = new Object[objects.length - left.length];
-        for (int i = 0; i < left.length; i++) {
-            left[i] = objects[i];
-        }
-        for (int i = 0; i < right.length; i++) {
-            right[i] = objects[left.length+i];
-        }
-        left = mergesort(left);
-        right = mergesort(right);
-        return sort(left,right);
-    }
-    public void sort_merge() {
-        arry = mergesort(arry);
-
-    }
-    public   void quickSort(Object arr[], int left, int right) {
-        int i =left, j = right;
-        Object tmp;
-        int pivot = Integer.parseInt(arr[(left + right) / 2].toString());
-        while (i <= j) {
-            while (Integer.parseInt(arr[i].toString()) < pivot)
-                i++;
-            while (Integer.parseInt(arr[j].toString()) > pivot)
-                j--;
-            if (i <= j) {
-                tmp = Integer.parseInt(arr[i].toString());
-                arr[i] = arr[j];
-                arr[j] = tmp;
-                i++;
-                j--;
+    public boolean search_binary(Object value) {
+        sort_selection();
+        int value_start = 0;
+        int value_last = count - 1;
+        int Answer = Integer.parseInt(value.toString());
+        while (value_start <= value_last) {
+            int value_middle = (value_start + value_last) / 2;
+            int middleValue = Integer.parseInt(arry[value_middle].toString());
+            if (middleValue == Answer) {
+                return true;
+            } else if (middleValue < Answer) {
+                value_start = value_middle + 1;
+            } else {
+                value_last = value_middle - 1;
             }
-        };
-        if (left < j)
-            quickSort(arr, left, j);
-        if (i < right)
-            quickSort(arr, i, right);
+        }
+        return false;
     }
-    public void sort_quick() {
-        quickSort(arry,0, arry.length-1);
+    private void update_hashtable(){
+        int index = hash(arry[count]);
+        Object[] temp = new Object[1];
+        if (hashtable[index] != null) {
+            temp = new Object[((Object[]) hashtable[index]).length + 1];
+        }
+        int i =0;
+        for(; i < temp.length - 1; i++){
+            temp[i] = ((Object []) hashtable[index])[i];
+        }
+        temp[i] = arry[count];
+        hashtable[index] = temp;
     }
 
+    private int nextPrime(int n) {
+        while (!isPrime(n)) {
+            n++;
+        }
+        return n;
+    }
+
+    // Check if a number is prime
+    private boolean isPrime(int n) {
+        if (n <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+
+    private int hash(Object key) {
+        return Integer.parseInt(key.toString()) % tablesize;
+    }
+
+    public boolean search_hashing(Object value) {
+        int index = hash(value);
+        if (hashtable[index] != null) {
+            Object[] temp = (Object[]) hashtable[index];
+            for (int i = 0; i < temp.length; i++) {
+                if (temp[i].equals(value)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

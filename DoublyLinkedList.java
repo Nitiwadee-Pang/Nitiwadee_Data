@@ -1,5 +1,3 @@
-package DoublyLinkedList;
-
 public class DoublyLinkedList implements Collection {
 
     class Node {
@@ -17,7 +15,8 @@ public class DoublyLinkedList implements Collection {
     private Node head;
     private Node tail;
     private int count;
-
+    Object [] hashtable;
+    int tablesize = 2;
     public DoublyLinkedList() {
         count = 0;
         head = null;
@@ -34,6 +33,7 @@ public class DoublyLinkedList implements Collection {
         if (head == null) {
             head = newNode;
         }
+
         count++;
     }
 
@@ -157,31 +157,107 @@ public class DoublyLinkedList implements Collection {
         }
         System.out.println("]");
     }
-    public void sort_bubble() {
-        if(count<=1)return;
-        for (int i = 0; i < count-i; i++) {
-            for (int j = 1; j < count - i; j++)
-                if (Integer.parseInt(get(j).toString()) > Integer.parseInt(get(j + 1).toString())) {
-                    Object temp = get(j);
-                    set(j, get(j + 1));
-                    set(j + 1, temp);
+    public void sort_insertion() {
+        Node temp = head;
+        for (int i = 0; i < count - 1; i++) {
+            Node value = temp;
+            for (Node tem = temp.link; tem != null; tem = tem.link) {
+                if (Integer.parseInt( tem.data.toString()) < Integer.parseInt(value.data.toString())) {
+                    value = tem;
                 }
+            }
+            Object data  = temp.data;
+            temp.data = value.data;
+            value.data = data;
+
+            temp = temp.link;
+        }
+    }
+    public boolean search_sequential(Object value) {
+        sort_insertion();
+        for (Node temp = head;temp!=null;temp=temp.link){
+            if(Integer.parseInt(temp.data.toString())==Integer.parseInt(value.toString())){
+                return  true;
+            }
+        }
+        return false;
+    }
+
+    public boolean search_binary(Object value) {
+        sort_insertion();
+        Node middle;
+        int value_start = 0;
+        int value_last = count - 1;
+        int Answer = Integer.parseInt(value.toString());
+        while (value_start <= value_last) {
+            int value_middle = (value_start + value_last) / 2;
+            middle = head;
+            for (int i = 1; i < value_middle; i++) {
+                middle = middle.link;
+            }
+            int middleValue = Integer.parseInt(middle.data.toString());
+
+            if (middleValue == Answer) {
+                return true; // พบค่า
+            } else if (middleValue < Answer) {
+                value_start = value_middle + 1;
+            } else {
+                value_last = value_middle - 1;
+            }
+        }
+        return false;
+    }
+    private void update_hashtable(){
+        for (Node tempMain = head;tempMain!=null;tempMain=tempMain.link){
+            int index = hash(Integer.parseInt(tempMain.data.toString()));
+            Object[] temp = new Object[1];
+            if (hashtable[index] != null) {
+                temp = new Object[((Object[]) hashtable[index]).length + 1];
+            }
+            int i =0;
+            for(; i < temp.length - 1; i++){
+                temp[i] = ((Object []) hashtable[index])[i];
+            }
+            temp[i] =tempMain.data;
+            hashtable[index] = temp;
         }
     }
 
-    public void sort_shell() {
-        if(count<=1)return;
-        int n = count;
-        for(int gap = n/2; gap > 0 ; gap /=2){
-            for (int i = gap; i < n; i++) {
-                Object temp = get(i + 1);
-                int j = i;
-                while (j >= gap && Integer.parseInt(get(j - gap + 1).toString()) > Integer.parseInt(temp.toString())){
-                    set(j + 1,get(j - gap +1));
-                    j -= gap;
+    private int nextPrime(int n) {
+        while (!isPrime(n)) {
+            n++;
+        }
+        return n;
+    }
+
+    // Check if a number is prime
+    private boolean isPrime(int n) {
+        if (n <= 1) return false;
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) return false;
+        }
+        return true;
+    }
+
+    private int hash(Object key) {
+        return Integer.parseInt(key.toString()) % tablesize;
+    }
+
+    public boolean search_hashing(Object value) {
+        sort_insertion();
+        tablesize = nextPrime(count);
+        hashtable = new Object[tablesize];
+        update_hashtable();
+        int index = hash(value);
+        if (hashtable[index] != null) {
+            Object[] temp = (Object[]) hashtable[index];
+            for (int i = 0; i < temp.length; i++) {
+                if (temp[i].equals(value)) {
+                    return true;
                 }
-                set(j + 1,temp);
             }
         }
+        return false;
     }
+
 }

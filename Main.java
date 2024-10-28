@@ -3,86 +3,86 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        Scanner input = new Scanner(System.in);
-        int size_arr = input.nextInt();
-        ArrayList obj_arr = new ArrayList(size_arr);
-
         String[] checker = new String[3];
+        checker[0] = "1";
+        Scanner input = new Scanner(System.in);
+        DoublyLinkedList objlinklist = new DoublyLinkedList();
         do {
             checker = input.nextLine().split(" ");
-            if (checker.length > 0 && !checker[0].isEmpty()) {
-                switch (Integer.parseInt(checker[0])) {
-                    case 1: // add
-                        try {
-                            obj_arr.add(checker[1]);
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case 2: // add
-                        try {
-                            obj_arr.add(Integer.parseInt(checker[1]), checker[2]);
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case 3: // get
-                        try {
-                            System.out.println(obj_arr.get(Integer.parseInt(checker[1])));
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case 4: // set
-                        try {
-                            obj_arr.set(Integer.parseInt(checker[1]), checker[2]);
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
-                    case 5: // remove
-                        try {
-                            obj_arr.remove(checker[2]);
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                        }
-                        break;
+            switch (Integer.parseInt(checker[0])) {
+                case 1: // add
+                    objlinklist.add(checker[1]);
+                    break;
+                case 2: // add index
+                    try {
+                        objlinklist.add(Integer.parseInt(checker[1]), checker[2]);
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 3: // get
+                    try {
+                        System.out.println(objlinklist.get(Integer.parseInt(checker[1])));
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 4: // set
+                    try {
+                        objlinklist.set(Integer.parseInt(checker[1]), Integer.parseInt(checker[2]));
+                    } catch (Exception e){
+                        System.out.println(e.getMessage());
+                    }
+                    break;
+                case 5: // remove
+                    objlinklist.remove(Integer.parseInt(checker[1]));
+                    break;
+                case 6: // find
+                    if(objlinklist.find(Integer.parseInt(checker[1]))){
+                        System.out.println("found");
+                    }else{
+                        System.out.println("not found");
+                    }
 
-                    case 6: // indexOf
-                        System.out.println(obj_arr.indexOf(checker[1]));
-                        break;
-                    case 7: // size
-                        System.out.println(obj_arr.size());
-                        break;
-                    case 8: // size
-                        System.out.println(obj_arr.max_size());
-                        break;
-                    case 9: // isEmpty
-                        if (obj_arr.isEmpty()) {
-                            System.out.println("is empty");
-                        } else {
-                            System.out.println("not empty");
-                        }
-                        break;
-                    case 10: // isFull
-                        if (obj_arr.isFull()) {
-                            System.out.println("is full");
-                        } else {
-                            System.out.println("not full");
-                        }
-                        break;
-                    case 11: // show
-                        obj_arr.show();
-                        break;
-                    case 12: // sort_merge
-                        obj_arr.sort_merge();
-                        break;
-                    case 13: // quicksort
-                        obj_arr.sort_quick();
-                        break;
-                }
+                    break;
+                case 7: // size
+                    System.out.println(objlinklist.size());
+                    break;
+                case 8: // isEmpty
+                    if(objlinklist.isEmpty()){
+                        System.out.println("is empty");
+                    }else{
+                        System.out.println("not empty");
+                    }
+                    break;
+                case 9: // show
+                    objlinklist.show();
+                    break;
+                case 10: // show_backward
+                    objlinklist.show_backward();
+                    break;
+                case 11: // search_sequential
+                    if(objlinklist.search_sequential(checker[1])){
+                        System.out.println("True");
+                    }else{
+                        System.out.println("False");
+                    }
+                    break;
+                case 12: // search_binary
+                    if(objlinklist.search_binary(checker[1])){
+                        System.out.println("True");
+                    }else{
+                        System.out.println("False");
+                    }
+                    break;
+                case 13: // search_hashing
+                    if(objlinklist.search_hashing(checker[1])){
+                        System.out.println("True");
+                    }else{
+                        System.out.println("False");
+                    }
+                    break;
             }
         } while (!checker[0].equals("-99"));
-        input.close();
     }
 }
