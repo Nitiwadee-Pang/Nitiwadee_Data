@@ -1,6 +1,6 @@
 package ArrayList;
 
-public class ArrayList implements Collection {
+public class ArrayList implements Collection{
     private int capacity;
     private int count;
     private Object[] arry;
@@ -118,30 +118,34 @@ public class ArrayList implements Collection {
         System.out.println("]");
     }
 
-    public void sort_insertion() {
-        for (int i = 1; i < size(); i++) {
-            Object temp = get(i);
-            int j = i - 1;
-            while (j >= 0 && Integer.parseInt(temp.toString()) < Integer.parseInt(get(j).toString())) {
-                arry[j + 1] = arry[j];
-                j--;
+    public void sort_bubble() {
+        for (int i = 0; i < count - 1; i++) {
+            for (int j = 0; j < count - 1 - i; j++) {
+                int val1 = Integer.parseInt((String) arry[j]);
+                int val2 = Integer.parseInt((String) arry[j + 1]);
+                if (val1 > val2) {
+                    Object temp = arry[j];
+                    arry[j] = arry[j + 1];
+                    arry[j + 1] = temp;
+                }
             }
-            arry[j + 1] = temp;
         }
     }
 
-    public void sort_selection() {
-        Object temp;
-        for (int i = 0; i < size() - 1; i++) {
-            int min = i;
-            for (int j = i + 1; j < size(); j++) {
-                if (Integer.parseInt(arry[j].toString()) < Integer.parseInt(arry[min].toString())) {
-                    min = j;
+    public void sort_shell() {
+        int gap = count / 2;
+        while (gap > 0) {
+            for (int i = gap; i < count; i++) {
+                Object temp = arry[i];
+                int j;
+                int tempVal = Integer.parseInt((String) temp);
+                for (j = i; j >= gap && Integer.parseInt((String) arry[j - gap]) > tempVal; j -= gap) {
+                    arry[j] = arry[j - gap];
                 }
+                arry[j] = temp;
             }
-            temp = arry[i];
-            arry[i] = arry[min];
-            arry[min] = temp;
+            gap /= 2;
         }
     }
+
 }

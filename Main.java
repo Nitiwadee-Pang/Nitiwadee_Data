@@ -1,7 +1,5 @@
 package ArrayList;
 
-import ArrayList.ArrayList;
-
 import java.util.Scanner;
 
 public class Main {
@@ -78,11 +76,11 @@ public class Main {
                     case 11: // show
                         obj_arr.show();
                         break;
-                    case 12: // sort_selection
-                        obj_arr.sort_selection();
+                    case 13: // sort_bubble
+                        obj_arr.sort_bubble();
                         break;
-                    case 13: // sort_insertion
-                        obj_arr.sort_insertion();
+                    case 14: // sort_shell
+                        obj_arr.sort_shell();
                         break;
                 }
             }
