@@ -3,84 +3,57 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(String[] args) {
-        String[] checker = new String[3];
+        String[] checker = new String[2];
         checker[0] = "1";
         Scanner input = new Scanner(System.in);
-        DoublyLinkedList objlinklist = new DoublyLinkedList();
+        BinaryTree objbt = new BinaryTree();
         do {
             checker = input.nextLine().split(" ");
             switch (Integer.parseInt(checker[0])) {
-                case 1: // add
-                    objlinklist.add(checker[1]);
+                case 1: // insert
+                    objbt.insert(checker[1]);
                     break;
-                case 2: // add index
-                    try {
-                        objlinklist.add(Integer.parseInt(checker[1]), checker[2]);
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
+                case 2: // pre order
+                    System.out.print("PreOrder: ");
+                    objbt.printPreOrder(objbt.root);
+                    System.out.println();
                     break;
-                case 3: // get
-                    try {
-                        System.out.println(objlinklist.get(Integer.parseInt(checker[1])));
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
+                case 3: // in order
+                    System.out.print("InOrder: ");
+                    objbt.printInOrder(objbt.root);
+                    System.out.println();
                     break;
-                case 4: // set
-                    try {
-                        objlinklist.set(Integer.parseInt(checker[1]), Integer.parseInt(checker[2]));
-                    } catch (Exception e){
-                        System.out.println(e.getMessage());
-                    }
+                case 4: // post order
+                    System.out.print("PostOrder: ");
+                    objbt.printPostOrder(objbt.root);
+                    System.out.println();
                     break;
-                case 5: // remove
-                    objlinklist.remove(Integer.parseInt(checker[1]));
-                    break;
-                case 6: // find
-                    if(objlinklist.find(Integer.parseInt(checker[1]))){
+                case 5: // search
+                    if(objbt.search(checker[1])){
                         System.out.println("found");
                     }else{
                         System.out.println("not found");
                     }
-
                     break;
-                case 7: // size
-                    System.out.println(objlinklist.size());
+                case 6: // destroyTree
+                    objbt.destroyTree(objbt.root);
                     break;
-                case 8: // isEmpty
-                    if(objlinklist.isEmpty()){
-                        System.out.println("is empty");
+                case 7: // full binary tree
+                    if(objbt.isFullBinaryTree(objbt.root)){
+                        System.out.println("Full Binary Tree => yes");
                     }else{
-                        System.out.println("not empty");
+                        System.out.println("Full Binary Tree => no");
                     }
                     break;
-                case 9: // show
-                    objlinklist.show();
-                    break;
-                case 10: // show_backward
-                    objlinklist.show_backward();
-                    break;
-                case 11: // search_sequential
-                    if(objlinklist.search_sequential(checker[1])){
-                        System.out.println("True");
+                case 8: // balanced binary tree
+                    if(objbt.isBalancedBinaryTree(objbt.root)){
+                        System.out.println("Balanced Binary Tree => yes");
                     }else{
-                        System.out.println("False");
+                        System.out.println("Balanced Binary Tree => no");
                     }
                     break;
-                case 12: // search_binary
-                    if(objlinklist.search_binary(checker[1])){
-                        System.out.println("True");
-                    }else{
-                        System.out.println("False");
-                    }
-                    break;
-                case 13: // search_hashing
-                    if(objlinklist.search_hashing(checker[1])){
-                        System.out.println("True");
-                    }else{
-                        System.out.println("False");
-                    }
+                case 9: // delete
+                    objbt.delete(checker[1]);
                     break;
             }
         } while (!checker[0].equals("-99"));
