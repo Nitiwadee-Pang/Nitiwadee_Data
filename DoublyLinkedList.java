@@ -1,8 +1,7 @@
 package DoublyLinkedList;
 
-import ArrayList.Collection;
-
 public class DoublyLinkedList implements Collection {
+
     class Node {
         Object data;
         Node link;
@@ -64,11 +63,11 @@ public class DoublyLinkedList implements Collection {
 
     @Override
     public Object get(int index) {
-        if (index < 0 || index > count) {
+        if (index <= 0 || index > count) {
             throw new IndexOutOfBoundsException("out of bound");
         }
         Node current = head;
-        for (int i = 0; i < index; i++) {
+        for (int i = 1; i < index; i++) {
             current = current.link;
         }
         return current.data;
@@ -76,11 +75,11 @@ public class DoublyLinkedList implements Collection {
 
     @Override
     public void set(int index, Object value) {
-        if (index < 0 || index > count) {
+        if (index <= 0 || index > count) {
             throw new IndexOutOfBoundsException("out of bound");
         }
         Node current = head;
-        for (int i = 0; i < index; i++) {
+        for (int i = 1; i < index; i++) {
             current = current.link;
         }
         current.data = value;
@@ -158,40 +157,31 @@ public class DoublyLinkedList implements Collection {
         }
         System.out.println("]");
     }
-
-    public void sort_selection() {
-        for (Node i = head; i != null; i = i.link) {
-            Node min = i;
-            for (Node j = i.link; j != null; j = j.link) {
-                if (Integer.parseInt(j.data.toString()) < Integer.parseInt(min.data.toString())) {
-                    min = j;
+    public void sort_bubble() {
+        if(count<=1)return;
+        for (int i = 0; i < count-i; i++) {
+            for (int j = 1; j < count - i; j++)
+                if (Integer.parseInt(get(j).toString()) > Integer.parseInt(get(j + 1).toString())) {
+                    Object temp = get(j);
+                    set(j, get(j + 1));
+                    set(j + 1, temp);
                 }
-            }
-            Object temp = i.data;
-            i.data = min.data;
-            min.data = temp;
         }
     }
 
-    public void sort_insertion() {
-        if (head == null) return;
-        Node sorted = null;
-        Node current = head;
-        while (current != null) {
-            Node next = current.link;
-            if (sorted == null || Integer.parseInt(current.data.toString()) < Integer.parseInt(sorted.data.toString())) {
-                current.link = sorted;
-                sorted = current;
-            } else {
-                Node temp = sorted;
-                while (temp.link != null && Integer.parseInt(temp.link.data.toString()) < Integer.parseInt(current.data.toString())) {
-                    temp = temp.link;
+    public void sort_shell() {
+        if(count<=1)return;
+        int n = count;
+        for(int gap = n/2; gap > 0 ; gap /=2){
+            for (int i = gap; i < n; i++) {
+                Object temp = get(i + 1);
+                int j = i;
+                while (j >= gap && Integer.parseInt(get(j - gap + 1).toString()) > Integer.parseInt(temp.toString())){
+                    set(j + 1,get(j - gap +1));
+                    j -= gap;
                 }
-                current.link = temp.link;
-                temp.link = current;
+                set(j + 1,temp);
             }
-            current = next;
         }
-        head = sorted;
     }
 }
