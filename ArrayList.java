@@ -1,5 +1,3 @@
-package ArrayList;
-
 public class ArrayList implements Collection{
     private int capacity;
     private int count;
@@ -118,34 +116,70 @@ public class ArrayList implements Collection{
         System.out.println("]");
     }
 
-    public void sort_bubble() {
-        for (int i = 0; i < count - 1; i++) {
-            for (int j = 0; j < count - 1 - i; j++) {
-                int val1 = Integer.parseInt((String) arry[j]);
-                int val2 = Integer.parseInt((String) arry[j + 1]);
-                if (val1 > val2) {
-                    Object temp = arry[j];
-                    arry[j] = arry[j + 1];
-                    arry[j + 1] = temp;
-                }
+    public  Object[] sort(Object[] left,Object[] right){
+        Object[] value = new Object[left.length+ right.length];
+        int l=0,r = 0,index = 0;
+        while (l <left.length && r < right.length){
+            if(Integer.parseInt(left[l].toString()) <= Integer.parseInt(right[r].toString())){
+                value[index++] = left[l++];
+            }
+            else{
+                value[index++] = right[r++];
             }
         }
-    }
+        while (l <left.length) {
+            value[index++] = left[l++];
+        }
+        while (r < right.length) {
+            value[index++] = right[r++];
+        }
 
-    public void sort_shell() {
-        int gap = count / 2;
-        while (gap > 0) {
-            for (int i = gap; i < count; i++) {
-                Object temp = arry[i];
-                int j;
-                int tempVal = Integer.parseInt((String) temp);
-                for (j = i; j >= gap && Integer.parseInt((String) arry[j - gap]) > tempVal; j -= gap) {
-                    arry[j] = arry[j - gap];
-                }
-                arry[j] = temp;
-            }
-            gap /= 2;
+        return value;
+    }
+    public  Object[] mergesort (Object[] objects) {
+        if(objects.length <=1){
+            return objects;
         }
+        Object[] left = new Object[objects.length/2];
+        Object[] right = new Object[objects.length - left.length];
+        for (int i = 0; i < left.length; i++) {
+            left[i] = objects[i];
+        }
+        for (int i = 0; i < right.length; i++) {
+            right[i] = objects[left.length+i];
+        }
+        left = mergesort(left);
+        right = mergesort(right);
+        return sort(left,right);
+    }
+    public void sort_merge() {
+        arry = mergesort(arry);
+
+    }
+    public   void quickSort(Object arr[], int left, int right) {
+        int i =left, j = right;
+        Object tmp;
+        int pivot = Integer.parseInt(arr[(left + right) / 2].toString());
+        while (i <= j) {
+            while (Integer.parseInt(arr[i].toString()) < pivot)
+                i++;
+            while (Integer.parseInt(arr[j].toString()) > pivot)
+                j--;
+            if (i <= j) {
+                tmp = Integer.parseInt(arr[i].toString());
+                arr[i] = arr[j];
+                arr[j] = tmp;
+                i++;
+                j--;
+            }
+        };
+        if (left < j)
+            quickSort(arr, left, j);
+        if (i < right)
+            quickSort(arr, i, right);
+    }
+    public void sort_quick() {
+        quickSort(arry,0, arry.length-1);
     }
 
 }

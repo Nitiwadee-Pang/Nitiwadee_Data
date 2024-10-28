@@ -1,60 +1,88 @@
-package Radix_sort;
-
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
         int size_arr = input.nextInt();
-        int[] arr = new int[size_arr];
-        for (int i = 0; i < size_arr; i++) {
-            arr[i] = input.nextInt();
-        }
-        radixSort(arr);
-        input.close();
-    }
-    public static void radixSort(int[] arr) {
-        int max = getMax(arr);
-        QueueLink[] queues = new QueueLink[10];
-        for (int i = 0; i < 10; i++) {
-            queues[i] = new QueueLink();
-        }
-        int exp = 1;
-        int step = 1;
-        while (max / exp > 0) {
-            for (int number : arr) {
-                int digit = (number / exp) % 10;
-                queues[digit].enqueue(number);
-            }
-            int index = 0;
-            for (int i = 0; i < 10; i++) {
-                while (!queues[i].isEmpty()) {
-                    arr[index++] = (int) queues[i].dequeue();
+        ArrayList obj_arr = new ArrayList(size_arr);
+
+        String[] checker = new String[3];
+        do {
+            checker = input.nextLine().split(" ");
+            if (checker.length > 0 && !checker[0].isEmpty()) {
+                switch (Integer.parseInt(checker[0])) {
+                    case 1: // add
+                        try {
+                            obj_arr.add(checker[1]);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 2: // add
+                        try {
+                            obj_arr.add(Integer.parseInt(checker[1]), checker[2]);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 3: // get
+                        try {
+                            System.out.println(obj_arr.get(Integer.parseInt(checker[1])));
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 4: // set
+                        try {
+                            obj_arr.set(Integer.parseInt(checker[1]), checker[2]);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+                    case 5: // remove
+                        try {
+                            obj_arr.remove(checker[2]);
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage());
+                        }
+                        break;
+
+                    case 6: // indexOf
+                        System.out.println(obj_arr.indexOf(checker[1]));
+                        break;
+                    case 7: // size
+                        System.out.println(obj_arr.size());
+                        break;
+                    case 8: // size
+                        System.out.println(obj_arr.max_size());
+                        break;
+                    case 9: // isEmpty
+                        if (obj_arr.isEmpty()) {
+                            System.out.println("is empty");
+                        } else {
+                            System.out.println("not empty");
+                        }
+                        break;
+                    case 10: // isFull
+                        if (obj_arr.isFull()) {
+                            System.out.println("is full");
+                        } else {
+                            System.out.println("not full");
+                        }
+                        break;
+                    case 11: // show
+                        obj_arr.show();
+                        break;
+                    case 12: // sort_merge
+                        obj_arr.sort_merge();
+                        break;
+                    case 13: // quicksort
+                        obj_arr.sort_quick();
+                        break;
                 }
             }
-            System.out.print("Step " + step++ + ": ");
-            printArray(arr);
-
-            exp *= 10;
-        }
-        System.out.print("Result => ");
-        printArray(arr);
-    }
-    public static int getMax(int[] arr) {
-        int max = arr[0];
-        for (int num : arr) {
-            if (num > max) {
-                max = num;
-            }
-        }
-        return max;
-    }
-    public static void printArray(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            if (i > 0) System.out.print(", ");
-            System.out.print(arr[i]);
-        }
-        System.out.println();
+        } while (!checker[0].equals("-99"));
+        input.close();
     }
 }
-
