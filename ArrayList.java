@@ -1,16 +1,14 @@
-public class ArrayList implements Collection{
+
+
+public class ArrayList implements Collection {
     private int capacity;
     private int count;
     private Object[] arry;
-    Object [] hashtable;
-    int tablesize = 2;
+
     public ArrayList(int size){
         arry = new Object[size];
         capacity = size;
         count = 0;
-
-        tablesize = nextPrime(size);
-        hashtable = new Object[tablesize];
     }
 
     @Override
@@ -34,7 +32,6 @@ public class ArrayList implements Collection{
         } else {
             throw new RuntimeException("out of bounds");
         }
-        update_hashtable();
         count++;
     }
 
@@ -120,91 +117,31 @@ public class ArrayList implements Collection{
             }
         System.out.println("]");
     }
+    //เรียงอักษร
+    public void sort_insertion() {
+        for (int i = 1; i < size(); i++) {
+            Object temp = get(i);
+            int j = i - 1;
+            while (j >= 0 && temp.toString().compareTo(get(j).toString()) < 0) {
+                arry[j + 1] = arry[j];
+                j--;
+            }
+            arry[j + 1] = temp;
+        }
+    }
+
     public void sort_selection() {
-        for (int i = 0; i < arry.length-1; i++) {
+        Object temp;
+        for (int i = 0; i < size() - 1; i++) {
             int min = i;
-            for (int j = i+1; j < arry.length; j++) {
-                if(Integer.parseInt(arry[min].toString()) > Integer.parseInt(arry[j].toString())){
+            for (int j = i + 1; j < size(); j++) {
+                if (arry[j].toString().compareTo(arry[min].toString()) < 0) {
                     min = j;
                 }
             }
-            Object temp = arry[i];
+            temp = arry[i];
             arry[i] = arry[min];
             arry[min] = temp;
         }
-    }
-    public boolean search_sequential(Object value) {
-        sort_selection();
-        for (int i = 0; i < size(); i++) {
-            if(Integer.parseInt(arry[i].toString()) == Integer.parseInt(value.toString())){
-                return  true;
-            }
-        }
-        return false;
-    }
-
-    public boolean search_binary(Object value) {
-        sort_selection();
-        int value_start = 0;
-        int value_last = count - 1;
-        int Answer = Integer.parseInt(value.toString());
-        while (value_start <= value_last) {
-            int value_middle = (value_start + value_last) / 2;
-            int middleValue = Integer.parseInt(arry[value_middle].toString());
-            if (middleValue == Answer) {
-                return true;
-            } else if (middleValue < Answer) {
-                value_start = value_middle + 1;
-            } else {
-                value_last = value_middle - 1;
-            }
-        }
-        return false;
-    }
-    private void update_hashtable(){
-        int index = hash(arry[count]);
-        Object[] temp = new Object[1];
-        if (hashtable[index] != null) {
-            temp = new Object[((Object[]) hashtable[index]).length + 1];
-        }
-        int i =0;
-        for(; i < temp.length - 1; i++){
-            temp[i] = ((Object []) hashtable[index])[i];
-        }
-        temp[i] = arry[count];
-        hashtable[index] = temp;
-    }
-
-    private int nextPrime(int n) {
-        while (!isPrime(n)) {
-            n++;
-        }
-        return n;
-    }
-
-    // Check if a number is prime
-    private boolean isPrime(int n) {
-        if (n <= 1) return false;
-        for (int i = 2; i <= Math.sqrt(n); i++) {
-            if (n % i == 0) return false;
-        }
-        return true;
-    }
-
-    private int hash(Object key) {
-        return Integer.parseInt(key.toString()) % tablesize;
-    }
-
-    public boolean search_hashing(Object value) {
-        int index = hash(value);
-        if (hashtable[index] != null) {
-            Object[] temp = (Object[]) hashtable[index];
-            for (int i = 0; i < temp.length; i++) {
-                if (temp[i].equals(value)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 }
